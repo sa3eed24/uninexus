@@ -39,7 +39,7 @@ class StaffWelcomeScreen extends StatelessWidget {
                   // "Welcome To UniNexus"
                   Container(
                     width: 222,
-                    height: 112,
+                    height: 120,
                     alignment: Alignment.center,
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +50,7 @@ class StaffWelcomeScreen extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.bold,
-                            fontSize: 28,
+                            fontSize: 36,
                             color: Color(0xFF0A4C7D),
                             height: 1.5,
                             letterSpacing: 0,
@@ -98,7 +98,7 @@ class StaffWelcomeScreen extends StatelessWidget {
                     width: 327,
                     height: 66,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF237ABA),
+                      color: const Color(0xFF237ABA).withOpacity(0.7),
                       borderRadius: BorderRadius.circular(23),
                     ),
                     child: TextButton(
@@ -132,7 +132,7 @@ class StaffWelcomeScreen extends StatelessWidget {
                     width: 327,
                     height: 66,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF237ABA),
+                      color: const Color(0xFF237ABA).withOpacity(0.7),
                       borderRadius: BorderRadius.circular(23),
                     ),
                     child: TextButton(
