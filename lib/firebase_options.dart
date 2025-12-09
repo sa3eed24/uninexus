@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'uninexus-1aea7.firebasestorage.app',
     iosBundleId: 'com.example.uninexus',
   );
+
 }

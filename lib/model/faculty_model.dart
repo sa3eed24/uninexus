@@ -8,7 +8,7 @@ class Faculty {
   final String photo;
   final List<String> subjects;
   final int workDays;
-  final String subID;
+  final String subID; // The target of the fix
 
   Faculty({
     required this.id,
@@ -27,13 +27,17 @@ class Faculty {
   factory Faculty.fromJson(Map<String, dynamic> json) {
     List<String> subjectsList = [];
 
+    // Helper function to safely convert any number type (int, double, num) to int, defaulting to 0
+    int safeParseInt(dynamic value) => (value is num) ? value.toInt() : 0;
+
+    // Helper function to safely convert any type (int, num, String) to String
+    String safeParseString(dynamic value) => value?.toString() ?? '';
+
     // Handle different JSON formats for subjects
     if (json['subjects'] != null) {
       if (json['subjects'] is List) {
-        // If it's already a list
         subjectsList = List<String>.from(json['subjects']);
       } else if (json['subjects'] is String) {
-        // If it's a comma-separated string, split it
         final subjectsStr = json['subjects'] as String;
         if (subjectsStr.isNotEmpty) {
           subjectsList = subjectsStr.split(',').map((s) => s.trim()).toList();
@@ -50,8 +54,10 @@ class Faculty {
       pass: json['pass'] ?? '',
       photo: json['photo'] ?? '',
       subjects: subjectsList,
-      workDays: json['workDays'] ?? 0,
-      subID: json['subID'] ?? '',
+      // Fix 1: Robustly parse workDays as Int
+      workDays: safeParseInt(json['workDays']),
+      // Fix 2: Robustly parse subID as String
+      subID: safeParseString(json['subID']),
     );
   }
 
@@ -65,7 +71,7 @@ class Faculty {
       'email': email,
       'pass': pass,
       'photo': photo,
-      'subjects': subjects, // Will be serialized as JSON array
+      'subjects': subjects,
       'workDays': workDays,
       'subID': subID,
     };
