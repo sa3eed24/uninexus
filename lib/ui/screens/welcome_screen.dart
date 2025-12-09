@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
+import '../../ui/screens/login_screen.dart';
 
 class StaffWelcomeScreen extends StatelessWidget {
   const StaffWelcomeScreen({Key? key}) : super(key: key);
