@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'welcome_screen.dart';
+import '../../ui/screens/login_screen.dart';
+import '../../ui/screens/welcome_screen.dart';
 
 void main() {
   runApp(const UniNexusApp());
