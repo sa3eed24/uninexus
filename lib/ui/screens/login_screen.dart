@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:uninexus/ui/screens/SignUp_Screen.dart';
+import '../../ui/screens/ForgetPassword_Screen.dart';
 import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -207,6 +209,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Forgot Password
                       TextButton(
                         onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
+                          );
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -289,7 +295,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            // Handle sign up
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                              );
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../ui/screens/login_screen.dart';
+import '../../ui/screens/SignUp_Screen.dart';
 
 class StaffWelcomeScreen extends StatelessWidget {
   const StaffWelcomeScreen({Key? key}) : super(key: key);
@@ -103,7 +104,10 @@ class StaffWelcomeScreen extends StatelessWidget {
                     ),
                     child: TextButton(
                       onPressed: () {
-
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                        );
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.transparent,
