@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uninexus/ui/screens/SignUp_Screen.dart';
+import 'package:uninexus/ui/screens/stu_home.dart';
 import '../../ui/screens/ForgetPassword_Screen.dart';
 import 'dashboard_screen.dart';
 
@@ -297,7 +298,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                                MaterialPageRoute(builder: (context) => const StuHomeScreen()),
                               );
                           },
                           style: TextButton.styleFrom(
