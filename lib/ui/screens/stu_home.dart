@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'login_screen.dart'; // <<< Import LoginScreen for navigation after logout
+
+// Keys for SharedPreferences (Duplicate these from login_screen.dart or put in a separate constants file)
+const String _kRememberMeKey = 'rememberMe';
+const String _kUserCodeKey = 'userCode';
+const String _kUserFirstNameKey = 'userFirstName';
+const String _kUserLastNameKey = 'userLastName';
 
 class StuHomeScreen extends StatefulWidget {
   const StuHomeScreen({Key? key}) : super(key: key);
@@ -10,8 +18,52 @@ class StuHomeScreen extends StatefulWidget {
 class _StuHomeScreenState extends State<StuHomeScreen> {
   int _currentIndex = 0;
 
+  // State variables for the user's name
+  String _firstName = 'Back';
+  String _lastName = '';
+
   static const Color primaryBlue = Color(0xFF237ABA);
   static const Color textBlue = Color(0xFF0A4C7D);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  // Function to load name from SharedPreferences
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final fName = prefs.getString(_kUserFirstNameKey);
+    final lName = prefs.getString(_kUserLastNameKey);
+
+    // Only update state if data was found
+    if (fName != null || lName != null) {
+      setState(() {
+        // Use the saved name or fallback to "Back" if null
+        _firstName = fName ?? 'Back';
+        _lastName = lName ?? '';
+      });
+    }
+  }
+
+  // --- NEW LOGOUT FUNCTION ---
+  Future<void> _logoutUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Clear all saved keys related to persistent login
+    await prefs.remove(_kRememberMeKey);
+    await prefs.remove(_kUserCodeKey);
+    await prefs.remove(_kUserFirstNameKey);
+    await prefs.remove(_kUserLastNameKey);
+
+    if (mounted) {
+      // Navigate back to the LoginScreen and replace the current screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +81,11 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ========= TOP BAR =========
+                // ========= TOP BAR (unchanged) =========
                 Row(
                   children: [
                     Container(
-                      width: 30,
+                      width: 60,
                       height: 30,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
@@ -49,11 +101,13 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
                     const Spacer(),
                     const Text(
                       'Home',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: primaryBlue,
+
                       ),
                     ),
                     const Spacer(flex: 2),
@@ -62,7 +116,7 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
 
                 const SizedBox(height: 24),
 
-                // ========= PROFILE HEADER =========
+                // ========= PROFILE HEADER (unchanged) =========
                 Column(
                   children: [
                     Container(
@@ -77,10 +131,11 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
                     ),
                     const SizedBox(height: 10),
 
-                    const Text(
-                      'Welcome Back!',
+                    // DYNAMIC WELCOME MESSAGE
+                    Text(
+                      'Welcome $_firstName $_lastName!',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
@@ -92,15 +147,15 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
 
                 const SizedBox(height: 24),
 
-                // ========= CARD 1 (Schedule teaser) =========
+                // ========= CARD 1 (Schedule teaser) (unchanged) =========
                 _StuHomeCard(
                   borderColor: primaryBlue,
                   child: Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               'Hi!',
                               style: TextStyle(
@@ -139,7 +194,7 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
 
                 const SizedBox(height: 16),
 
-                // ========= TRANSPARENT NOTIFICATIONS AREA =========
+                // ========= TRANSPARENT NOTIFICATIONS AREA (unchanged) =========
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -160,7 +215,7 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
         ),
       ),
 
-      // ========= CENTER QR BUTTON =========
+      // ========= CENTER QR BUTTON (unchanged) =========
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SizedBox(
         width: 62,
@@ -177,11 +232,11 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
         ),
       ),
 
-      // ========= BOTTOM NAVIGATION =========
+      // ========= BOTTOM NAVIGATION (MODIFIED) =========
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         child: SizedBox(
-          height: 74,
+          height: 50,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -191,11 +246,12 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
                 selected: _currentIndex == 0,
                 onTap: () => setState(() => _currentIndex = 0),
               ),
+              // --- MODIFIED: SCHEDULE BUTTON IS NOW LOGOUT ---
               _StuBottomItem(
-                image: 'assets/images/calendar.png',
-                label: 'schedule',
+                image: 'assets/images/calendar.png', // You might want to use a logout icon here
+                label: 'Logout', // Change label to Logout
                 selected: _currentIndex == 1,
-                onTap: () => setState(() => _currentIndex = 1),
+                onTap: _logoutUser, // <<< CALL LOGOUT FUNCTION
               ),
               const SizedBox(width: 40),
               _StuBottomItem(
@@ -218,7 +274,7 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
   }
 }
 
-// ========= REUSABLE CARD =========
+// ========= REUSABLE CARD (unchanged) =========
 class _StuHomeCard extends StatelessWidget {
   final Widget child;
   final VoidCallback? onTap;
@@ -252,7 +308,7 @@ class _StuHomeCard extends StatelessWidget {
   }
 }
 
-// ========= REUSABLE NAV ITEM =========
+// ========= REUSABLE NAV ITEM (unchanged) =========
 class _StuBottomItem extends StatelessWidget {
   final String image;
   final String label;
@@ -269,7 +325,8 @@ class _StuBottomItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color selectedColor = selected ? _StuHomeScreenState.primaryBlue : Colors.grey;
+    // Note: The selectedColor variable is redundant since it's not used.
+    // final Color selectedColor = selected ? _StuHomeScreenState.primaryBlue : Colors.white;
 
     return InkWell(
       onTap: onTap,
@@ -283,6 +340,8 @@ class _StuBottomItem extends StatelessWidget {
               image,
               width: 26,
               height: 26,
+              // Note: If you don't have an asset named 'assets/images/logout.png',
+              // the app will crash unless you update this path or use an existing icon.
               color: selected ? _StuHomeScreenState.primaryBlue : Colors.black54,
             ),
             const SizedBox(height: 4),

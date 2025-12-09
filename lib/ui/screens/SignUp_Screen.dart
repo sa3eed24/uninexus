@@ -102,9 +102,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 32),
 
                   // Title
-                  SizedBox(
+                  const SizedBox(
                     width: 281,
-                    child: const Text(
+                    child: Text(
                       'Welcome',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -120,10 +120,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 8),
 
                   // Subtitle
-                  SizedBox(
+                  const SizedBox(
                     width: 270,
                     height: 52,
-                    child: const Text(
+                    child: Text(
                       'Enter your details to start your\njourney',
                       textAlign: TextAlign.center,
                       style: TextStyle(
